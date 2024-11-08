@@ -28,7 +28,7 @@ struct CreateGuildChatInputCommandFields<'a> {
     name_localizations: Option<&'a HashMap<String, String>>,
     nsfw: Option<bool>,
     options: Option<&'a [CommandOption]>,
-    context: Option<&'a [InteractionContextType]>,
+    contexts: Option<&'a [InteractionContextType]>,
 }
 
 /// Create a chat input command in a guild.
@@ -63,7 +63,7 @@ impl<'a> CreateGuildChatInputCommand<'a> {
             name_localizations: None,
             nsfw: None,
             options: None,
-            context: None,
+            contexts: None,
         })
         .and_then(|fields| {
             validate_description(description)?;
@@ -98,15 +98,6 @@ impl<'a> CreateGuildChatInputCommand<'a> {
 
             fields.options = Some(options);
 
-            Ok(fields)
-        });
-
-        self
-    }
-
-    pub fn contexts(mut self, contexts: &'a [InteractionContextType]) -> Self {
-        self.fields = self.fields.and_then(|mut fields| {
-            fields.context = Some(contexts);
             Ok(fields)
         });
 
@@ -222,7 +213,7 @@ impl TryIntoRequest for CreateGuildChatInputCommand<'_> {
             name_localizations: fields.name_localizations,
             nsfw: fields.nsfw,
             options: fields.options,
-            contexts: fields.context,
+            contexts: fields.contexts,
         })
         .build()
     }

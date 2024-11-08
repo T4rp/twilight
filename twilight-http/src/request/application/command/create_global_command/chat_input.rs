@@ -77,6 +77,16 @@ impl<'a> CreateGlobalChatInputCommand<'a> {
         }
     }
 
+
+    pub fn contexts(mut self, contexts: &'a [InteractionContextType]) -> Self {
+        self.fields = self.fields.and_then(|mut fields| {
+            fields.contexts = Some(contexts);
+            Ok(fields)
+        });
+
+        self
+    }
+
     /// Add a list of command options.
     ///
     /// Required command options must be added before optional options.
