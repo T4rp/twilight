@@ -29,7 +29,7 @@ pub use self::{
 use serde::Serialize;
 use std::collections::HashMap;
 use twilight_model::{
-    application::command::{CommandOption, CommandType},
+    application::{command::{CommandOption, CommandType}, interaction::InteractionContextType},
     guild::Permissions,
     id::{marker::ApplicationMarker, Id},
 };
@@ -58,6 +58,8 @@ struct CommandBorrowed<'a> {
     pub nsfw: Option<bool>,
     #[serde(default)]
     pub options: Option<&'a [CommandOption]>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub contexts: Option<&'a [InteractionContextType]>,
 }
 
 #[cfg(test)]
@@ -112,6 +114,7 @@ mod tests {
             name_localizations: command.name_localizations.as_ref(),
             nsfw: command.nsfw,
             options: Some(&command.options),
+            contexts: command.contexts.as_ref().map(Vec::as_slice),
         };
     }
 }

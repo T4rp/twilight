@@ -146,6 +146,7 @@ impl TryIntoRequest for CreateGuildMessageCommand<'_> {
             name_localizations: fields.name_localizations,
             nsfw: fields.nsfw,
             options: None,
+            contexts: None,
         })
         .build()
     }

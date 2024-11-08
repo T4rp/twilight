@@ -8,7 +8,7 @@ use crate::{
 };
 use std::{collections::HashMap, future::IntoFuture};
 use twilight_model::{
-    application::command::{Command, CommandType},
+    application::{command::{Command, CommandType}, interaction::InteractionContextType},
     guild::Permissions,
     id::{marker::ApplicationMarker, Id},
 };
@@ -20,6 +20,7 @@ struct CreateGlobalMessageCommandFields<'a> {
     name: &'a str,
     name_localizations: Option<&'a HashMap<String, String>>,
     nsfw: Option<bool>,
+    contexts: Option<&'a [InteractionContextType]>,
 }
 
 /// Create a new message global command.
@@ -48,6 +49,7 @@ impl<'a> CreateGlobalMessageCommand<'a> {
             name,
             name_localizations: None,
             nsfw: None,
+            contexts: None,
         })
         .and_then(|fields| {
             validate_name(name)?;
@@ -152,6 +154,7 @@ impl TryIntoRequest for CreateGlobalMessageCommand<'_> {
             name_localizations: fields.name_localizations,
             nsfw: fields.nsfw,
             options: None,
+            contexts: fields.contexts,
         })
         .build()
     }

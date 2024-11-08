@@ -8,7 +8,7 @@ use crate::{
 };
 use std::{collections::HashMap, future::IntoFuture};
 use twilight_model::{
-    application::command::{Command, CommandOption, CommandType},
+    application::{command::{Command, CommandOption, CommandType}, interaction::InteractionContextType},
     guild::Permissions,
     id::{marker::ApplicationMarker, Id},
 };
@@ -26,6 +26,7 @@ struct CreateGlobalChatInputCommandFields<'a> {
     name_localizations: Option<&'a HashMap<String, String>>,
     nsfw: Option<bool>,
     options: Option<&'a [CommandOption]>,
+    contexts: Option<&'a [InteractionContextType]>
 }
 
 /// Create a new chat input global command.
@@ -59,6 +60,7 @@ impl<'a> CreateGlobalChatInputCommand<'a> {
             name_localizations: None,
             nsfw: None,
             options: None,
+            contexts: None,
         })
         .and_then(|fields| {
             validate_description(description)?;
@@ -217,6 +219,7 @@ impl TryIntoRequest for CreateGlobalChatInputCommand<'_> {
             name_localizations: fields.name_localizations,
             nsfw: fields.nsfw,
             options: fields.options,
+            contexts: fields.contexts,
         })
         .build()
     }
